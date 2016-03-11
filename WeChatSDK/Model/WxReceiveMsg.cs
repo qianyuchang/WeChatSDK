@@ -12,7 +12,6 @@ namespace WeChatSDK.Model
    public class WxReceiveMsg
     {
         public Int64 MsgId { get; set; }
-       [XmlText]
         public string ToUserName { get; set; }
         public string FromUserName { get; set; }
         public int CreateTime { get; set; }
