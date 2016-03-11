@@ -31,6 +31,8 @@ namespace WeChatDemo.Controllers
             if (!Basic.CheckSignature(signature, timestamp, nonce, token))
                 return null;
 
+            WeChatHelper wechat=new WeChatHelper();
+
             using (var stream = System.Web.HttpContext.Current.Request.InputStream)
             {
                 Byte[] postBytes = new Byte[stream.Length];
@@ -38,39 +40,48 @@ namespace WeChatDemo.Controllers
                 var postString = System.Text.Encoding.UTF8.GetString(postBytes);
 
                 var r=XMLHelper.DeSeriailze<WxReceiveMsg>(postString);
-                var list = new List<string>()
-                {
-                    "Hello Wrold!",
-                    "hi",
-                    "逗比",
-                    "神经病",
-                    "好无聊",
-                    "tx的文档真蛋疼",
-                    "xml各种恶心"
-                };
-                switch (r.MsgType)
-                {
-                    case "text":
-                        return XMLHelper.Seriailze(new WxSendMsg()
-                        {
-                            ToUserName=r.FromUserName,
-                            FromUserName = r.ToUserName,
-                            MsgType = "text",
-                            Content=list[new Random().Next(list.Count-1)],
-                            CreateTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds
-                            
-                        });
-                        break;
-                    case "image": break;
-                    case "voice": break;
-                    case "video": break;
-                    case "shortvideo": break;
-                    case "location": break;
-                    case "link": break;
-                }
+                wechat.ReciveText+= OnReciveText;
+ 
+               
             }
             return null;
 
+
+        }
+
+        public void OnReciveText(WxReceiveMsg msg)
+        {
+            var r= XMLHelper.Seriailze(new WxSendMsg()
+            {
+                ToUserName = msg.FromUserName,
+                FromUserName = msg.ToUserName,
+                MsgType = "text",
+                Content ="Hello World!",
+                CreateTime = DateTime.UtcNow.ToTimeStamp()
+            });
+        }
+        public void OnReciveImg(WxReceiveMsg msg)
+        {
+
+        }
+        public void OnReciveVoice(WxReceiveMsg msg)
+        {
+
+        }
+        public void OnReciveVideo(WxReceiveMsg msg)
+        {
+
+        }
+        public void OnReciveShortVideo(WxReceiveMsg msg)
+        {
+
+        }
+        public void OnReciveShortLocation(WxReceiveMsg msg)
+        {
+
+        }
+        public void OnReciveLink(WxReceiveMsg msg)
+        {
 
         }
 

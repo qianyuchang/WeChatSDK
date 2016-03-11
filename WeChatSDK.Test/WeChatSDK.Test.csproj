@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="EventTest.cs" />
     <Compile Include="XMLHelperTest.cs" />
     <Compile Include="HttpHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

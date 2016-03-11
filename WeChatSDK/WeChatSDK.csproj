@@ -41,14 +41,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basic.cs" />
+    <Compile Include="Helper\DateTimeHelper.cs" />
     <Compile Include="Helper\HttpHelper.cs" />
     <Compile Include="Helper\XMLHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Model\WxSendMsg.cs" />
     <Compile Include="Model\WxReceiveMsg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeChatHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Event\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

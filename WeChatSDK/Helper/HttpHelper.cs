@@ -18,12 +18,12 @@ namespace WeChatSDK.Helper
             }
         }
 
-        public static string HttpPost(string url,IEnumerable<KeyValuePair<string, string>> args)
+        public static string HttpPost(string url,string args)
         {
             using (var client = new HttpClient())
             {
 
-                var content = new FormUrlEncodedContent(args);
+                var content = new StringContent(args);
 
                 var response =  client.PostAsync(url, content);
 

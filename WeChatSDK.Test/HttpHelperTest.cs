@@ -22,9 +22,9 @@ namespace WeChatSDK.Test
         {
             var args = new Dictionary<string, string>
             {
-                { "sign", "1" }
+                
             };
-            var r = HttpHelper.HttpPost("http://localhost:8077/Wechat/TestApi", args);
+            var r = HttpHelper.HttpPost("http://localhost:8077/Wechat/TestApi", "{ 'sign':'1' }");
             Assert.AreEqual("1", r, "request fail");
             Console.WriteLine(r);
         }
