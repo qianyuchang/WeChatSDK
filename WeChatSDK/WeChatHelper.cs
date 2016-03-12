@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeChatSDK.Helper;
 using WeChatSDK.Model;
 
 namespace WeChatSDK
@@ -25,9 +27,15 @@ namespace WeChatSDK
 
         public event WxReceiveMsgHandle ReciveLink;
 
-        public void ReceiveMsg(WxReceiveMsg msg)
+        public void ReceiveMsg(Stream stream)
         {
-            if(string.IsNullOrEmpty(msg?.MsgType))
+            var postBytes = new Byte[stream.Length];
+            stream.Read(postBytes, 0, (Int32)stream.Length);
+            var postString = System.Text.Encoding.UTF8.GetString(postBytes);
+
+            var msg = XMLHelper.DeSeriailze<WxReceiveMsg>(postString);
+
+            if (string.IsNullOrEmpty(msg?.MsgType))
                 return;
             switch (msg.MsgType)
             {

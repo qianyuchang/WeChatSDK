@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using WeChatSDK.Model;
 
 namespace WeChatSDK.Helper
 {
@@ -22,8 +23,7 @@ namespace WeChatSDK.Helper
         {
             using (var client = new HttpClient())
             {
-
-                var content = new StringContent(args);
+                var content = new StringContent(args,Encoding.UTF8,"application/json");
 
                 var response =  client.PostAsync(url, content);
 
@@ -31,6 +31,27 @@ namespace WeChatSDK.Helper
 
                 return responseString.Result;
             }
+        }
+
+        public static T HttpGetWechatResult<T>(string url, string paramStr = "") where T : WxResultBase, new()
+        {
+            var r = HttpGet(url);
+            if (r == null)
+                return null;
+
+            var entity = JsonHelper.Deseriailze<T>(r);
+            
+            if (entity?.errcode != 0)
+            {
+                if (entity == null)
+                {
+                    //todo write log
+                    return null;
+                }
+                //todo write log
+
+            }
+            return entity;
         }
     }
 }

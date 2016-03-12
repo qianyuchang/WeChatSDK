@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using WeChatDemo.Helper;
 using WeChatSDK;
 using WeChatDemo.Filter;
+using WeChatDemo.Model;
 using WeChatSDK.Helper;
 using WeChatSDK.Model;
 
@@ -19,46 +20,38 @@ namespace WeChatDemo.Controllers
         [HttpGet]
         public String GetWxMsg(string signature, string timestamp, string nonce,string echostr )
         {
-            var token = new AppSettingsReader().GetValue("Token",typeof(string)) as string;
-            if (Basic.CheckSignature(signature, timestamp, nonce, token))
+            
+            if (Basic.CheckSignature(signature, timestamp, nonce, WxAccountFactory.Token))
                 return echostr;
             return null;
         }
         [HttpPost]
         public string GetWxMsg(string signature, string timestamp, string nonce)
         {
-            var token = new AppSettingsReader().GetValue("Token", typeof(string)) as string;
-            if (!Basic.CheckSignature(signature, timestamp, nonce, token))
+            if (!Basic.CheckSignature(signature, timestamp, nonce, WxAccountFactory.Token))
                 return null;
 
-            WeChatHelper wechat=new WeChatHelper();
-
+            var wechat=new WeChatHelper();
+            wechat.ReciveText += OnReciveText;
             using (var stream = System.Web.HttpContext.Current.Request.InputStream)
             {
-                Byte[] postBytes = new Byte[stream.Length];
-                stream.Read(postBytes, 0, (Int32)stream.Length);
-                var postString = System.Text.Encoding.UTF8.GetString(postBytes);
-
-                var r=XMLHelper.DeSeriailze<WxReceiveMsg>(postString);
-                wechat.ReciveText+= OnReciveText;
- 
-               
+                wechat.ReceiveMsg(stream);
             }
             return null;
-
-
         }
 
         public void OnReciveText(WxReceiveMsg msg)
         {
-            var r= XMLHelper.Seriailze(new WxSendMsg()
-            {
-                ToUserName = msg.FromUserName,
-                FromUserName = msg.ToUserName,
-                MsgType = "text",
-                Content ="Hello World!",
-                CreateTime = DateTime.UtcNow.ToTimeStamp()
-            });
+            //var r= XMLHelper.Seriailze(new WxSendMsg()
+            //{
+            //    ToUserName = msg.FromUserName,
+            //    FromUserName = msg.ToUserName,
+            //    MsgType = "text",
+            //    Content ="Hello World!",
+            //    CreateTime = DateTime.UtcNow.ToTimeStamp()
+            //});
+
+            WeChatSDK.Basic.SendText(WxAccountFactory.AccessToken, msg.FromUserName,"Hello World");
         }
         public void OnReciveImg(WxReceiveMsg msg)
         {

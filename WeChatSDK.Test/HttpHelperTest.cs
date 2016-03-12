@@ -20,13 +20,13 @@ namespace WeChatSDK.Test
          [TestMethod]
         public void TestHttpPost()
         {
-            var args = new Dictionary<string, string>
-            {
-                
-            };
+           
             var r = HttpHelper.HttpPost("http://localhost:8077/Wechat/TestApi", "{ 'sign':'1' }");
             Assert.AreEqual("1", r, "request fail");
             Console.WriteLine(r);
         }
+
+        
+
     }
 }

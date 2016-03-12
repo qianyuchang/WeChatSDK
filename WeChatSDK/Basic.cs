@@ -29,21 +29,30 @@ namespace WeChatSDK
          
         }
 
-        public static void GetAccessToken(string appid,string secret)
+        public static string GetAccessToken(string appid,string secret)
         {
             var url=
                 $"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={secret}";
 
-            HttpHelper.HttpPost(url,null);
+            var r=HttpHelper.HttpPost(url,null);
+            return r;
 
         }
 
-        public static void SendMsg(string accessToken)
+        public static void SendText(string accessToken,string touser,string content)
         {
             var url = $"https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={accessToken} ";
 
-            
-            HttpHelper.HttpPost(url, null);
+            var args = new{
+                touser=touser,
+                msgtype="text",
+                text = new
+                {
+                    content=content
+                }
+            };
+       
+            HttpHelper.HttpPost(url, JsonHelper.Seriailze(args));
         }
     }
 }
