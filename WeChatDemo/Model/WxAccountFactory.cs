@@ -22,8 +22,8 @@ namespace WeChatDemo.Model
         {
             Db=1,
             Config=2,
-            //Hardcoded,dont recommand
-            Text = 3
+            //dont recommand
+            Hardcoded = 3
         }
 
         public static object _locker;
